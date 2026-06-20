@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رحلة تطوير الألعاب — من الصفر إلى المحترف</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #0f0f1a;
+    --bg3: #14141f;
+    --card: #16161f;
+    --card2: #1c1c2a;
+    --border: #2a2a3f;
+    --accent1: #7c3aed;
+    --accent2: #4f46e5;
+    --accent3: #06b6d4;
+    --accent4: #10b981;
+    --accent5: #f59e0b;
+    --accent6: #ef4444;
+    --text: #e8e8f0;
+    --text2: #a0a0c0;
+    --text3: #6060a0;
+    --glow1: rgba(124,58,237,0.3);
+    --glow2: rgba(79,70,229,0.2);
+    --glow3: rgba(6,182,212,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(124,58,237,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 90%, rgba(6,182,212,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 60% 40%, rgba(79,70,229,0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* HERO */
+  .hero {
+    padding: 80px 0 60px;
+    text-align: center;
+    position: relative;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #c4b5fd 40%, #67e8f9 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--text2);
+    max-width: 600px;
+    margin: 0 auto 40px;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent3), var(--accent1));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label { font-size: 0.82rem; color: var(--text3); margin-top: 2px; }
+
+  /* NAV TABS */
+  .nav-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 auto 48px;
+    max-width: 100%;
+  }
+  .nav-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+  }
+  .tab {
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.25s;
+    background: transparent;
+    color: var(--text2);
+    border: none;
+    font-family: inherit;
+  }
+  .tab.active, .tab:hover {
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    color: #fff;
+  }
+
+  /* SECTIONS */
+  .section { display: none; animation: fadeIn 0.35s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* SECTION HEADER */
+  .sec-header {
+    margin-bottom: 32px;
+  }
+  .sec-header h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .sec-header p { color: var(--text2); }
+
+  /* CARDS GRID */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 32px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 32px; }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent3));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover { border-color: var(--accent1); transform: translateY(-3px); box-shadow: 0 12px 40px var(--glow1); }
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    font-size: 2.2rem;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+  .card p { font-size: 0.88rem; color: var(--text2); }
+
+  /* PHASE CARDS */
+  .phase {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .phase-badge {
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .phase-badge.beginner { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+  .phase-badge.intermediate { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+  .phase-badge.advanced { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+  .phase h3 { font-size: 1.35rem; font-weight: 800; }
+  .phase-time { color: var(--text3); font-size: 0.85rem; margin-right: auto; }
+
+  /* LISTS */
+  .skill-list { list-style: none; }
+  .skill-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.92rem;
+  }
+  .skill-list li:last-child { border-bottom: none; }
+  .skill-list li::before {
+    content: '▹';
+    color: var(--accent1);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* PROJECTS */
+  .project-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+  .project-card h4 { font-weight: 700; margin-bottom: 6px; color: var(--accent3); }
+  .project-card p { font-size: 0.87rem; color: var(--text2); }
+  .project-tag {
+    display: inline-block;
+    background: rgba(124,58,237,0.15);
+    color: var(--accent1);
+    border: 1px solid rgba(124,58,237,0.3);
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    margin-top: 8px;
+    margin-left: 6px;
+  }
+
+  /* ENGINE COMPARE */
+  .engine-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 24px;
+    padding: 30px;
+    transition: all 0.3s;
+  }
+  .engine-card.recommended {
+    border-color: var(--accent1);
+    box-shadow: 0 0 30px var(--glow1);
+  }
+  .engine-card.recommended::after {
+    content: '✦ الأفضل للمبتدئين';
+    position: absolute;
+    top: -1px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 16px;
+    border-radius: 0 0 12px 12px;
+  }
+  .engine-card { position: relative; }
+  .engine-name { font-size: 1.5rem; font-weight: 900; margin-bottom: 6px; }
+  .engine-score {
+    display: flex;
+    gap: 8px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+  .score-item { font-size: 0.82rem; }
+  .score-bar {
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 100px;
+    margin-top: 3px;
+    overflow: hidden;
+  }
+  .score-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent3));
+    transition: width 1s ease;
+  }
+
+  /* RESOURCES */
+  .resource-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+  }
+  .resource-item:hover { border-color: var(--accent3); background: var(--card); }
+  .resource-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .resource-icon.yt { background: rgba(239,68,68,0.15); }
+  .resource-icon.web { background: rgba(6,182,212,0.15); }
+  .resource-icon.course { background: rgba(124,58,237,0.15); }
+  .resource-title { font-weight: 600; font-size: 0.92rem; }
+  .resource-desc { font-size: 0.8rem; color: var(--text2); margin-top: 2px; }
+  .resource-free {
+    margin-right: auto;
+    background: rgba(16,185,129,0.15);
+    color: #10b981;
+    border: 1px solid rgba(16,185,129,0.3);
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* 7 DAYS */
+  .day-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 20px;
+    align-items: start;
+    transition: all 0.3s;
+  }
+  .day-card:hover { border-color: var(--accent1); }
+  .day-num {
+    text-align: center;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    border-radius: 14px;
+    padding: 14px 8px;
+  }
+  .day-num .d { font-size: 0.72rem; font-weight: 600; opacity: 0.8; }
+  .day-num .n { font-size: 1.8rem; font-weight: 900; line-height: 1; }
+  .day-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .day-tasks { list-style: none; }
+  .day-tasks li {
+    font-size: 0.87rem;
+    color: var(--text2);
+    padding: 5px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .day-tasks li::before { content: '○'; color: var(--accent3); flex-shrink: 0; }
+  .day-time {
+    display: inline-block;
+    background: rgba(245,158,11,0.12);
+    color: #f59e0b;
+    border: 1px solid rgba(245,158,11,0.25);
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    margin-top: 10px;
+    font-weight: 600;
+  }
+
+  /* TIPS */
+  .tip-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    transition: all 0.3s;
+  }
+  .tip-card:hover { border-color: var(--accent5); }
+  .tip-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .tip-title { font-weight: 700; margin-bottom: 6px; }
+  .tip-text { font-size: 0.88rem; color: var(--text2); }
+
+  /* WARNING */
+  .warn-card {
+    background: rgba(239,68,68,0.07);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 18px;
+    padding: 20px;
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .warn-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .warn-title { font-weight: 700; color: #ef4444; margin-bottom: 4px; font-size: 0.95rem; }
+  .warn-text { font-size: 0.87rem; color: var(--text2); }
+
+  /* TRACK */
+  .track-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 24px;
+    padding: 28px;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .track-card:hover { border-color: var(--accent1); transform: translateY(-4px); }
+  .track-icon { font-size: 2.8rem; margin-bottom: 14px; }
+  .track-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
+  .track-list { list-style: none; margin-top: 12px; }
+  .track-list li {
+    font-size: 0.85rem; color: var(--text2);
+    padding: 4px 0;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .track-list li::before { content: '·'; color: var(--accent1); font-size: 1.2rem; line-height: 1.2; }
+  .track-badge {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 4px 14px;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  /* TOOLS */
+  .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  .tool-item {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .tool-item:hover { border-color: var(--accent3); background: var(--card); }
+  .tool-item .t-icon { font-size: 2rem; margin-bottom: 8px; }
+  .tool-item .t-name { font-weight: 700; font-size: 0.9rem; }
+  .tool-item .t-desc { font-size: 0.78rem; color: var(--text2); margin-top: 4px; }
+  .tool-item .t-free {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+  .free { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+  .paid { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 28px 0;
+  }
+
+  .label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 14px;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 48px 0 32px;
+    color: var(--text3);
+    font-size: 0.82rem;
+  }
+  .footer span {
+    background: linear-gradient(135deg, var(--accent1), var(--accent3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+  }
+
+  @media (max-width: 600px) {
+    .day-card { grid-template-columns: 60px 1fr; gap: 14px; }
+    .hero h1 { font-size: 2rem; }
+    .hero-stats { gap: 24px; }
+    .phase-header { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">🎮 خارطة طريق شاملة</div>
+    <h1>رحلتك إلى عالم<br>تطوير الألعاب</h1>
+    <p>من الصفر إلى بناء ألعاب حقيقية — خطة عملية مفصّلة لمن يبدأ من البداية بشغف حقيقي</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label">مراحل تعلّم</div></div>
+      <div class="stat"><div class="stat-num">12+</div><div class="stat-label">مشروع عملي</div></div>
+      <div class="stat"><div class="stat-num">18</div><div class="stat-label">شهراً للإتقان</div></div>
+      <div class="stat"><div class="stat-num">7</div><div class="stat-label">أيام للانطلاق</div></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="nav-wrapper">
+    <div class="nav-tabs" id="tabs">
+      <button class="tab active" onclick="showTab('roadmap', this)">🗺️ خارطة الطريق</button>
+      <button class="tab" onclick="showTab('engine', this)">⚙️ اختيار المحرك</button>
+      <button class="tab" onclick="showTab('skills', this)">🧠 المهارات</button>
+      <button class="tab" onclick="showTab('resources', this)">📚 المصادر</button>
+      <button class="tab" onclick="showTab('tracks', this)">🎯 المسارات</button>
+      <button class="tab" onclick="showTab('tools', this)">🛠️ الأدوات</button>
+      <button class="tab" onclick="showTab('tips', this)">💡 النصائح</button>
+      <button class="tab" onclick="showTab('week1', this)">📅 أول 7 أيام</button>
+      <button class="tab" onclick="showTab('certs', this)">🎓 كورسات بشهادات</button>
+      <button class="tab" onclick="showTab('projects', this)">🚀 مشاريع البداية</button>
+    </div>
+  </div>
+
+  <!-- ===== ROADMAP ===== -->
+  <div class="section active" id="roadmap">
+    <div class="sec-header">
+      <h2>خارطة الطريق الكاملة</h2>
+      <p>ثلاث مراحل متسلسلة تأخذك من الصفر إلى مستوى احترافي حقيقي</p>
+    </div>
+
+    <!-- PHASE 1 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-badge beginner">المرحلة الأولى</span>
+        <h3>🌱 مبتدئ — الأساسيات</h3>
+        <span class="phase-time">⏱ 3 – 5 أشهر</span>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="label">ما ستتعلمه</div>
+          <ul class="skill-list">
+            <li>أساسيات البرمجة بلغة GDScript (لغة Godot)</li>
+            <li>المفاهيم الأساسية لمحرك Godot 4</li>
+            <li>المتغيرات، الشروط، الحلقات، الدوال</li>
+            <li>نظام Scenes & Nodes في Godot</li>
+            <li>فيزياء الألعاب الأساسية (2D)</li>
+            <li>التحكم في الشخصية والحركة</li>
+            <li>الصوت والمؤثرات البصرية البسيطة</li>
+            <li>نشر اللعبة ومشاركتها على itch.io</li>
+          </ul>
+        </div>
+        <div>
+          <div class="label">المشاريع العملية</div>
+          <div class="project-card">
+            <h4>🏓 مشروع 1 — Pong مطوّر</h4>
+            <p>أول لعبة حقيقية: لعبة بينغ بونج بواجهة مستخدم وصوت ونظام نقاط</p>
+            <span class="project-tag">2D</span><span class="project-tag">أسبوع 3</span>
+          </div>
+          <div class="project-card">
+            <h4>🦘 مشروع 2 — Platformer بسيطة</h4>
+            <p>شخصية تقفز وتتحرك، منصات، عدو واحد، وشاشة نهاية</p>
+            <span class="project-tag">2D</span><span class="project-tag">الشهر 2</span>
+          </div>
+          <div class="project-card">
+            <h4>🔫 مشروع 3 — Top-Down Shooter</h4>
+            <p>لعبة إطلاق نار من الأعلى بأعداء متعددين وصحة ومستويات</p>
+            <span class="project-tag">2D</span><span class="project-tag">الشهر 4</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-badge intermediate">المرحلة الثانية</span>
+        <h3>⚡ متوسط — الاحتراف</h3>
+        <span class="phase-time">⏱ 5 – 8 أشهر</span>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="label">ما ستتعلمه</div>
+          <ul class="skill-list">
+            <li>دخول عالم الثلاثي الأبعاد 3D في Godot أو Unity</li>
+            <li>نظام Inventory وحفظ البيانات</li>
+            <li>الذكاء الاصطناعي الأساسي للأعداء (Pathfinding)</li>
+            <li>تصميم المستويات (Level Design)</li>
+            <li>الرسوم المتحركة المتقدمة (Animation State Machine)</li>
+            <li>UI/UX داخل الألعاب</li>
+            <li>مبادئ Game Design وتوازن اللعبة</li>
+            <li>Shader بسيط وتأثيرات بصرية</li>
+          </ul>
+        </div>
+        <div>
+          <div class="label">المشاريع العملية</div>
+          <div class="project-card">
+            <h4>⚔️ مشروع 4 — RPG ثنائي الأبعاد</h4>
+            <p>لعبة دور بخريطة، شخصيات، حوارات، نظام معارك بسيط وقصة</p>
+            <span class="project-tag">2D RPG</span><span class="project-tag">الشهر 6</span>
+          </div>
+          <div class="project-card">
+            <h4>🌐 مشروع 5 — أول لعبة 3D</h4>
+            <p>لعبة استكشاف ثلاثية الأبعاد مع شخصية بشرية وبيئة متكاملة</p>
+            <span class="project-tag">3D</span><span class="project-tag">الشهر 9</span>
+          </div>
+          <div class="project-card">
+            <h4>🧩 مشروع 6 — لعبة ألغاز أصلية</h4>
+            <p>فكرة أصيلة بالكامل: Puzzle بميكانيكية فريدة ومصقولة للنشر</p>
+            <span class="project-tag">Original</span><span class="project-tag">الشهر 11</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-badge advanced">المرحلة الثالثة</span>
+        <h3>🔥 متقدم — الاحتراف الكامل</h3>
+        <span class="phase-time">⏱ 6 – 12 شهراً</span>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="label">ما ستتعلمه</div>
+          <ul class="skill-list">
+            <li>Multiplayer والألعاب الشبكية</li>
+            <li>تحسين الأداء (Optimization & Profiling)</li>
+            <li>Procedural Generation وخوارزميات توليد العالم</li>
+            <li>تطوير لعبة كاملة قابلة للنشر التجاري</li>
+            <li>Steam / App Store / itch.io وإدارة الإصدارات</li>
+            <li>تسويق اللعبة وبناء جمهور</li>
+            <li>العمل ضمن فريق أو استديو</li>
+            <li>Portfolio احترافي للتوظيف</li>
+          </ul>
+        </div>
+        <div>
+          <div class="label">المشاريع العملية</div>
+          <div class="project-card">
+            <h4>🚀 مشروع 7 — لعبتك الكاملة</h4>
+            <p>مشروع ختامي: لعبة متكاملة من فكرتك تماماً، منشورة على itch.io أو Steam</p>
+            <span class="project-tag">Portfolio</span><span class="project-tag">الشهر 15+</span>
+          </div>
+          <div class="project-card">
+            <h4>🎮 مشروع 8 — Game Jam</h4>
+            <p>المشاركة في مسابقة تطوير ألعاب (Ludum Dare, Global Game Jam)</p>
+            <span class="project-tag">مسابقة</span><span class="project-tag">الشهر 18</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ENGINE ===== -->
+  <div class="section" id="engine">
+    <div class="sec-header">
+      <h2>اختيار محرك الألعاب</h2>
+      <p>مقارنة شاملة — والتوصية الواضحة للمبتدئين</p>
+    </div>
+    <div class="grid-3" style="align-items:start">
+
+      <div class="engine-card recommended">
+        <div class="engine-name" style="color:#7c3aed">Godot 4</div>
+        <p style="font-size:0.85rem;color:var(--text2)">مفتوح المصدر، مجاني 100%، خفيف على الجهاز</p>
+        <div style="margin-top:16px">
+          <div class="score-item">سهولة التعلم<div class="score-bar"><div class="score-fill" style="width:95%"></div></div></div>
+          <div class="score-item" style="margin-top:8px">الأداء<div class="score-bar"><div class="score-fill" style="width:75%"></div></div></div>
+          <div class="score-item" style="margin-top:8px">المجتمع<div class="score-bar"><div class="score-fill" style="width:80%"></div></div></div>
+          <div class="score-item" style="margin-top:8px">2D متقدم<div class="score-bar"><div class="score-fill" style="width:92%"></div></div></div>
+        </div>
+        <div class="divider"></div>
+        <ul class="skill-list" style="font-size:0.83rem">
+          <li>مجاني بالكامل — بلا رسوم أو عمولات</li>
+          <li>GDScript: سهل وشبيه بـ Python</li>
+          <li>مثالي لألعاب 2D والـ Indie</li>
+          <li>يعمل على أجهزة ضعيفة</li>
+          <li>توثيق ممتاز بالإنجليزية</li>
+        </ul>
+        <div style="margin-top:14px;padding:10px;background:rgba(16,185,129,0.1);border-radius:10px;font-size:0.83rem;color:#10b981">
+          ✅ <strong>ابدأ بـ Godot إذا:</strong> ميزانيتك محدودة، جهازك متوسط، أو هدفك ألعاب 2D أو Indie Games
+        </div>
+      </div>
+
+      <div class="engine-card">
+        <div class="engine-name" style="color:#06b6d4">Unity</div>
+        <p style="font-size:0.85rem;color:var(--text2)">الأكثر انتشاراً في الصناعة، وظائف أكثر، مكتبات ضخمة</p>
+        <div style="margin-top:16px">
+          <div class="score-item">سهولة التعلم<div class="score-bar"><div class="score-fill" style="width:70%"></div></div></div>
+          <div class="score-item" style="margin-top:8px">الأداء<div class="score-bar"><div class="score-fill" style="width:82%"></div></div></div>
+          <div class="score-item" style="margin-top:8px">المجتمع<div class="score-bar"><div class="score-fill" style="width:95%"></div></div></div>
+          <div class="score-item" style="margin-top:8px">Asset Store<div class="score-bar"><div class="score-fill" style="width:98%"></div></div></div>
+        </div>
+        <div class="divider"></div>
+        <ul class="skill-list" style="font-size:0.83rem">
+          <li>يستخدم C# (أقوى وأعقد)</li>
+          <li>Asset Store ضخم جداً</li>
+          <li>مناسب للـ Mobile Games</li>
+          <li>متاح مجاناً بحدود</li>
+          <li>أكثر طلباً في التوظيف</li>
+        </ul>
+        <div style="margin-top:14px;padding:10px;background:rgba(6,182,212,0.08);border-radius:10px;font-size:0.83rem;color:#06b6d4">
+          💡 <strong>انتقل لـ Unity إذا:</strong> أردت التوظيف في شركات أو تطوير ألعاب موبايل تجارية
+        </div>
+      </div>
+
+      <div class="engine-card">
+        <div class="engine-name" style="color:#f59e0b">Unreal Engine 5</div>
+        <p style="font-size:0.85rem;color:var(--text2)">الأقوى تقنياً، للألعاب الضخمة AAA، يحتاج جهاز قوي</p>
+        <div style="margin-top:16px">
+          <div class="score-item">سهولة التعلم<div class="score-bar"><div class="score-fill" style="width:30%"></div></div></div>
+          <div class="score-item" style="margin-top:8px">الأداء<div class="score-bar"><div class="score-fill" style="width:98%"></div></div></div>
+          <div class="score-item" style="margin-top:8px">الجرافيكس<div class="score-bar"><div class="score-fill" style="width:100%"></div></div></div>
+          <div class="score-item" style="margin-top:8px">ألعاب AAA<div class="score-bar"><div class="score-fill" style="width:95%"></div></div></div>
+        </div>
+        <div class="divider"></div>
+        <ul class="skill-list" style="font-size:0.83rem">
+          <li>Blueprints بصري + C++ للمتقدمين</li>
+          <li>Nanite و Lumen: جرافيكس فوتوريالستك</li>
+          <li>يحتاج جهاز قوي جداً (32GB RAM+)</li>
+          <li>منحنى تعلم شديد الانحدار</li>
+          <li>5% من الإيرادات بعد 1M$</li>
+        </ul>
+        <div style="margin-top:14px;padding:10px;background:rgba(245,158,11,0.08);border-radius:10px;font-size:0.83rem;color:#f59e0b">
+          ⚠️ <strong>لاحقاً:</strong> إذا أردت العمل في استوديوهات AAA بعد سنتين من الخبرة
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card" style="background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(6,182,212,0.05));border-color:var(--accent1)">
+      <h3 style="margin-bottom:12px">🎯 التوصية النهائية للمبتدئ</h3>
+      <p style="color:var(--text2);font-size:0.95rem">ابدأ بـ <strong style="color:#7c3aed">Godot 4</strong> — تعلّم أسرع، إحباط أقل، وستبني ألعاباً حقيقية في أسابيع لا أشهر. بعد 8-12 شهراً وعندما تريد التوظيف أو ألعاب موبايل، انتقل إلى <strong style="color:#06b6d4">Unity</strong>. المهارات ستنتقل معك لأن المفاهيم متشابهة.</p>
+    </div>
+  </div>
+
+  <!-- ===== SKILLS ===== -->
+  <div class="section" id="skills">
+    <div class="sec-header">
+      <h2>تقسيم المهارات</h2>
+      <p>كل مهارة بالترتيب الصحيح لتعلّمها</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <span class="card-icon">💻</span>
+        <h3>البرمجة (أولوية قصوى)</h3>
+        <ul class="skill-list" style="margin-top:8px">
+          <li>GDScript: المتغيرات، الشروط، الحلقات</li>
+          <li>الدوال والـ Classes (OOP بسيط)</li>
+          <li>Signals و Events</li>
+          <li>تصحيح الأخطاء (Debugging)</li>
+          <li>هياكل البيانات: Arrays, Dictionaries</li>
+        </ul>
+        <div style="margin-top:12px;padding:8px;background:rgba(16,185,129,0.08);border-radius:8px;font-size:0.8rem;color:#10b981">⭐ ابدأ هنا أولاً — 60% من وقتك</div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">🎮</span>
+        <h3>Game Design</h3>
+        <ul class="skill-list" style="margin-top:8px">
+          <li>توازن الصعوبة (Difficulty Curve)</li>
+          <li>Game Feel: كيف تشعر اللعبة</li>
+          <li>تصميم المستويات (Level Design)</li>
+          <li>أنظمة المكافأة والتقدم</li>
+          <li>Prototyping السريع</li>
+        </ul>
+        <div style="margin-top:12px;padding:8px;background:rgba(124,58,237,0.08);border-radius:8px;font-size:0.8rem;color:#a78bfa">🎯 تعلّمه موازياً للبرمجة</div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">🎨</span>
+        <h3>الفن والجرافيكس</h3>
+        <ul class="skill-list" style="margin-top:8px">
+          <li>Pixel Art للمبتدئين (Aseprite)</li>
+          <li>أساسيات الألوان والتناسق</li>
+          <li>UI Design: القوائم والأزرار</li>
+          <li>Animation الأساسية</li>
+          <li>استخدام Assets جاهزة من OpenGameArt</li>
+        </ul>
+        <div style="margin-top:12px;padding:8px;background:rgba(245,158,11,0.08);border-radius:8px;font-size:0.8rem;color:#f59e0b">💡 استخدم Assets جاهزة في البداية — وكّز على البرمجة</div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">🔊</span>
+        <h3>الصوت والموسيقى</h3>
+        <ul class="skill-list" style="margin-top:8px">
+          <li>استخدام مكتبات أصوات مجانية</li>
+          <li>مؤثرات الصوت (SFX) الأساسية</li>
+          <li>BFXR / jsfxr: لتوليد الأصوات</li>
+          <li>دمج الصوت في المحرك</li>
+          <li>ضبط مستويات الصوت</li>
+        </ul>
+        <div style="margin-top:12px;padding:8px;background:rgba(6,182,212,0.08);border-radius:8px;font-size:0.8rem;color:#06b6d4">🎵 أهم مما يعتقد الناس — الصوت يصنع 50% من التجربة</div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">📖</span>
+        <h3>سرد القصة (Narrative)</h3>
+        <ul class="skill-list" style="margin-top:8px">
+          <li>بناء الشخصيات وتطورها</li>
+          <li>هيكل القصة الثلاثي</li>
+          <li>أنواع السرد في الألعاب</li>
+          <li>كتابة الحوارات الطبيعية</li>
+          <li>World Building بسيط</li>
+        </ul>
+        <div style="margin-top:12px;padding:8px;background:rgba(239,68,68,0.08);border-radius:8px;font-size:0.8rem;color:#ef4444">⏰ المرحلة الثانية — بعد إتقان الأساسيات</div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">📊</span>
+        <h3>إدارة المشاريع</h3>
+        <ul class="skill-list" style="margin-top:8px">
+          <li>Git & GitHub: حفظ الكود</li>
+          <li>تقسيم المشروع لمهام صغيرة</li>
+          <li>Scope Management: لا تبني كثيراً</li>
+          <li>Trello / Notion للتنظيم</li>
+          <li>نشر الألعاب على itch.io</li>
+        </ul>
+        <div style="margin-top:12px;padding:8px;background:rgba(16,185,129,0.08);border-radius:8px;font-size:0.8rem;color:#10b981">🚀 تعلّم Git من الأسبوع الأول</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESOURCES ===== -->
+  <div class="section" id="resources">
+    <div class="sec-header">
+      <h2>المصادر التعليمية</h2>
+      <p>أفضل المصادر المجانية المختارة بعناية</p>
+    </div>
+
+    <div class="label">📺 يوتيوب — قنوات ضرورية</div>
+    <div class="resource-item">
+      <div class="resource-icon yt">📺</div>
+      <div><div class="resource-title">GDQuest</div><div class="resource-desc">أفضل قناة لتعلم Godot — شروحات منهجية ومشاريع عملية</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon yt">📺</div>
+      <div><div class="resource-title">HeartBeast</div><div class="resource-desc">شروحات Godot ممتازة للمبتدئين — Action RPG Series</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon yt">📺</div>
+      <div><div class="resource-title">Brackeys</div><div class="resource-desc">الأشهر في تعليم Unity — تعود للنشر بعد غياب طويل</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon yt">📺</div>
+      <div><div class="resource-title">Game Maker's Toolkit</div><div class="resource-desc">ليس تعليمياً — بل لفهم Game Design بعمق شديد</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon yt">📺</div>
+      <div><div class="resource-title">Pirate Software (Thor)</div><div class="resource-desc">مطور محترف يشرح كل شيء من التصميم للنشر</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+
+    <div class="divider"></div>
+    <div class="label">🌐 مواقع ومنصات</div>
+    <div class="resource-item">
+      <div class="resource-icon web">🌐</div>
+      <div><div class="resource-title">docs.godotengine.org</div><div class="resource-desc">التوثيق الرسمي لـ Godot — مرجعك الأول دائماً</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon web">🌐</div>
+      <div><div class="resource-title">itch.io</div><div class="resource-desc">لنشر ألعابك ومشاهدة ألعاب indie مفتوحة المصدر</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon web">🌐</div>
+      <div><div class="resource-title">OpenGameArt.org</div><div class="resource-desc">آلاف الـ Assets المجانية: Sprites، أصوات، موسيقى</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon web">🌐</div>
+      <div><div class="resource-title">Kenney.nl</div><div class="resource-desc">حزم Assets ضخمة ومجانية وعالية الجودة</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+
+    <div class="divider"></div>
+    <div class="label">📚 كورسات منظّمة</div>
+    <div class="resource-item">
+      <div class="resource-icon course">📘</div>
+      <div><div class="resource-title">Godot 4 Crash Course — freeCodeCamp</div><div class="resource-desc">كورس كامل على يوتيوب — 6 ساعات من الصفر</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon course">📘</div>
+      <div><div class="resource-title">CS50's Introduction to Game Development — Harvard</div><div class="resource-desc">من هارفارد — يغطي مبادئ تطوير الألعاب بعمق</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon course">📘</div>
+      <div><div class="resource-title">Unity Learn Platform</div><div class="resource-desc">المنصة الرسمية لتعلم Unity — مسارات منظمة</div></div>
+      <span class="resource-free">مجاني</span>
+    </div>
+  </div>
+
+  <!-- ===== TRACKS ===== -->
+  <div class="section" id="tracks">
+    <div class="sec-header">
+      <h2>المسارات المهنية</h2>
+      <p>ثلاثة مسارات مختلفة — اختر ما يناسب شخصيتك وأهدافك</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="track-card">
+        <div class="track-icon">💻</div>
+        <div class="track-title">مبرمج الألعاب</div>
+        <p style="font-size:0.85rem;color:var(--text2)">تركيزك على الكود والميكانيكيات — تجعل الأفكار حقيقة</p>
+        <ul class="track-list">
+          <li>GDScript / C# / C++</li>
+          <li>فيزياء الألعاب والخوارزميات</li>
+          <li>أنظمة الذكاء الاصطناعي</li>
+          <li>تحسين الأداء</li>
+          <li>Multiplayer وشبكات</li>
+        </ul>
+        <span class="track-badge" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2)">الأعلى طلباً في سوق العمل</span>
+      </div>
+
+      <div class="track-card">
+        <div class="track-icon">🎨</div>
+        <div class="track-title">مصمم الألعاب</div>
+        <p style="font-size:0.85rem;color:var(--text2)">تركيزك على التجربة — ما الذي يجعل اللعبة ممتعة؟</p>
+        <ul class="track-list">
+          <li>Game Design Document (GDD)</li>
+          <li>تصميم المستويات والبيئات</li>
+          <li>توازن الصعوبة والاقتصاد</li>
+          <li>User Experience في الألعاب</li>
+          <li>Prototyping وتجربة المستخدم</li>
+        </ul>
+        <span class="track-badge" style="background:rgba(124,58,237,0.1);color:#a78bfa;border:1px solid rgba(124,58,237,0.2)">يحتاج تفكيراً إبداعياً وتحليلياً</span>
+      </div>
+
+      <div class="track-card">
+        <div class="track-icon">🎬</div>
+        <div class="track-title">Indie Developer (الأفضل للبداية)</div>
+        <p style="font-size:0.85rem;color:var(--text2)">تعمل وحدك — تتحكم في كل شيء وتنشر لعبتك</p>
+        <ul class="track-list">
+          <li>برمجة + تصميم + فن بسيط</li>
+          <li>إدارة المشروع بمفردك</li>
+          <li>itch.io و Steam Greenlight</li>
+          <li>تسويق وبناء جمهور</li>
+          <li>Game Jams للبداية</li>
+        </ul>
+        <span class="track-badge free">المسار الأنسب كبداية</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:8px">
+      <h3 style="margin-bottom:12px">🤔 كيف تختار مسارك؟</h3>
+      <div class="grid-3" style="margin-top:16px">
+        <div style="padding:14px;background:var(--bg2);border-radius:12px">
+          <div style="font-weight:700;margin-bottom:8px;color:#10b981">تحب حل المشاكل والخوارزميات؟</div>
+          <div style="font-size:0.85rem;color:var(--text2)">→ مسار <strong>المبرمج</strong></div>
+        </div>
+        <div style="padding:14px;background:var(--bg2);border-radius:12px">
+          <div style="font-weight:700;margin-bottom:8px;color:#a78bfa">تحب التصميم والتفكير في تجربة اللاعب؟</div>
+          <div style="font-size:0.85rem;color:var(--text2)">→ مسار <strong>المصمم</strong></div>
+        </div>
+        <div style="padding:14px;background:var(--bg2);border-radius:12px">
+          <div style="font-weight:700;margin-bottom:8px;color:#f59e0b">تريد نشر لعبة خاصة بك بسرعة؟</div>
+          <div style="font-size:0.85rem;color:var(--text2)">→ مسار <strong>Indie</strong> (البداية المثلى)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOOLS ===== -->
+  <div class="section" id="tools">
+    <div class="sec-header">
+      <h2>الأدوات الضرورية</h2>
+      <p>كل ما تحتاجه — مرتّب حسب الأولوية</p>
+    </div>
+
+    <div class="label">🔴 ضرورية من اليوم الأول</div>
+    <div class="tool-grid" style="margin-bottom:28px">
+      <div class="tool-item">
+        <div class="t-icon">🎮</div>
+        <div class="t-name">Godot 4</div>
+        <div class="t-desc">محرك الألعاب الرئيسي</div>
+        <div class="t-free free">مجاني 100%</div>
+      </div>
+      <div class="tool-item">
+        <div class="t-icon">📝</div>
+        <div class="t-name">VS Code</div>
+        <div class="t-desc">محرر الكود الأفضل</div>
+        <div class="t-free free">مجاني</div>
+      </div>
+      <div class="tool-item">
+        <div class="t-icon">🐙</div>
+        <div class="t-name">Git + GitHub</div>
+        <div class="t-desc">حفظ ونسخ احتياطي للكود</div>
+        <div class="t-free free">مجاني</div>
+      </div>
+    </div>
+
+    <div class="label">🟡 للفن والرسوم (مرحلة 1+)</div>
+    <div class="tool-grid" style="margin-bottom:28px">
+      <div class="tool-item">
+        <div class="t-icon">🖼️</div>
+        <div class="t-name">Aseprite</div>
+        <div class="t-desc">Pixel Art احترافي</div>
+        <div class="t-free paid">مدفوع بسيط ($20)</div>
+      </div>
+      <div class="tool-item">
+        <div class="t-icon">✏️</div>
+        <div class="t-name">Libresprite</div>
+        <div class="t-desc">بديل Aseprite مجاني</div>
+        <div class="t-free free">مجاني</div>
+      </div>
+      <div class="tool-item">
+        <div class="t-icon">🎭</div>
+        <div class="t-name">Krita</div>
+        <div class="t-desc">رسم رقمي متكامل</div>
+        <div class="t-free free">مجاني</div>
+      </div>
+      <div class="tool-item">
+        <div class="t-icon">🧊</div>
+        <div class="t-name">Blender</div>
+        <div class="t-desc">نمذجة 3D احترافية</div>
+        <div class="t-free free">مجاني</div>
+      </div>
+    </div>
+
+    <div class="label">🟢 للصوت والموسيقى</div>
+    <div class="tool-grid" style="margin-bottom:28px">
+      <div class="tool-item">
+        <div class="t-icon">🔊</div>
+        <div class="t-name">Audacity</div>
+        <div class="t-desc">تسجيل وتعديل صوت</div>
+        <div class="t-free free">مجاني</div>
+      </div>
+      <div class="tool-item">
+        <div class="t-icon">🎵</div>
+        <div class="t-name">LMMS</div>
+        <div class="t-desc">تأليف موسيقى للألعاب</div>
+        <div class="t-free free">مجاني</div>
+      </div>
+      <div class="tool-item">
+        <div class="t-icon">💥</div>
+        <div class="t-name">jsfxr.com</div>
+        <div class="t-desc">توليد مؤثرات صوتية</div>
+        <div class="t-free free">مجاني</div>
+      </div>
+    </div>
+
+    <div class="label">🔵 للتنظيم والإدارة</div>
+    <div class="tool-grid">
+      <div class="tool-item">
+        <div class="t-icon">📋</div>
+        <div class="t-name">Notion</div>
+        <div class="t-desc">Game Design Document</div>
+        <div class="t-free free">مجاني</div>
+      </div>
+      <div class="tool-item">
+        <div class="t-icon">🗂️</div>
+        <div class="t-name">Trello</div>
+        <div class="t-desc">إدارة مهام المشروع</div>
+        <div class="t-free free">مجاني</div>
+      </div>
+      <div class="tool-item">
+        <div class="t-icon">🌍</div>
+        <div class="t-name">itch.io</div>
+        <div class="t-desc">نشر ألعابك للعالم</div>
+        <div class="t-free free">مجاني</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TIPS ===== -->
+  <div class="section" id="tips">
+    <div class="sec-header">
+      <h2>نصائح ومخاطر</h2>
+      <p>ما يفرّق من ينجح عمّن يستسلم في الطريق</p>
+    </div>
+
+    <div class="label" style="margin-bottom:16px">⚠️ أخطاء شائعة — تجنّبها بالكامل</div>
+    <div class="warn-card">
+      <div class="warn-icon">🔄</div>
+      <div><div class="warn-title">قفز بين المحركات باستمرار</div><div class="warn-text">كثيرون يبدأون بـ Godot ثم يتحولون لـ Unity ثم Unreal — هذا يضيّع الوقت. اختر محرك وأكمل معه 12 شهراً على الأقل.</div></div>
+    </div>
+    <div class="warn-card">
+      <div class="warn-icon">🌍</div>
+      <div><div class="warn-title">بناء لعبة طموحة جداً في البداية</div><div class="warn-text">"سأصنع GTA أو Minecraft!" — هذا أكبر خطأ. ابنِ Pong، ابنِ لعبة صغيرة، انتهِ منها، انشرها، انتقل للتالي.</div></div>
+    </div>
+    <div class="warn-card">
+      <div class="warn-icon">📚</div>
+      <div><div class="warn-title">مشاهدة الدروس بدون تطبيق</div><div class="warn-text">مشاهدة 100 ساعة دون كتابة سطر كود = لا تعلّم حقيقي. كل درس تشاهده يجب أن يعقبه تطبيق عملي فوري.</div></div>
+    </div>
+    <div class="warn-card">
+      <div class="warn-icon">✨</div>
+      <div><div class="warn-title">التركيز على الجرافيكس قبل الميكانيكيات</div><div class="warn-text">الجرافيكس الجميل لا يجعل اللعبة ممتعة. ركّز على أن اللعبة تكون مرضية للّعب أولاً، الجماليات تأتي لاحقاً.</div></div>
+    </div>
+    <div class="warn-card">
+      <div class="warn-icon">🧩</div>
+      <div><div class="warn-title">تعلّم بلا مشاريع حقيقية</div><div class="warn-text">التعليم بدون إنهاء مشروع = لا تقدم. حتى لو المشروع "بشع" — أنهِه ودوّنه في Porfolio.</div></div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="label" style="margin-bottom:16px">💡 نصائح للاستمرار وعدم فقدان الحماس</div>
+
+    <div class="tip-card">
+      <div class="tip-icon">🎯</div>
+      <div><div class="tip-title">اجعل هدفك "إنهاء" لا "إتقان"</div><div class="tip-text">لعبة سيئة منتهية أفضل من فكرة مثالية غير منفّذة. التحسين يأتي مع الممارسة، وليس مع التفكير.</div></div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">👥</div>
+      <div><div class="tip-title">انضم لمجتمع</div><div class="tip-text">Godot Discord، Reddit r/gamedev، Twitter/X لمطوري الـ Indie — المجتمع يحفّزك ويساعدك عندما تعلق.</div></div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">📅</div>
+      <div><div class="tip-title">30 دقيقة يومياً أفضل من 5 ساعات أسبوعياً</div><div class="tip-text">الاتساق أهم من الكثافة. 30 دقيقة كل يوم تصنع فرقاً هائلاً بعد 6 أشهر مقارنةً بجلسات متقطعة.</div></div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🏆</div>
+      <div><div class="tip-title">شارك في Game Jams مبكراً</div><div class="tip-text">Ludum Dare وGlobal Game Jam تعطيك deadline حقيقية وتجبرك على إنهاء لعبة في 48 ساعة — أقوى تجربة تعليمية.</div></div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">📓</div>
+      <div><div class="tip-title">وثّق رحلتك</div><div class="tip-text">Devlog على يوتيوب أو Twitter — يبني جمهورك مبكراً ويجعلك مسؤولاً أمام نفسك وأمام الآخرين.</div></div>
+    </div>
+  </div>
+
+  <!-- ===== WEEK 1 ===== -->
+  <div class="section" id="week1">
+    <div class="sec-header">
+      <h2>أول 7 أيام — خطة تفصيلية</h2>
+      <p>ابدأ اليوم بدون تردد — كل يوم واضح ومحدد</p>
+    </div>
+
+    <div class="day-card">
+      <div class="day-num"><div class="d">يوم</div><div class="n">١</div></div>
+      <div>
+        <div class="day-title">🛠️ إعداد البيئة وأول تجربة</div>
+        <ul class="day-tasks">
+          <li>تحميل وتثبيت Godot 4 (الموقع الرسمي: godotengine.org)</li>
+          <li>إنشاء حساب GitHub وتعلّم أساسيات Git (add, commit, push)</li>
+          <li>تشغيل مشروع "Hello World" في Godot — فقط نص يظهر على الشاشة</li>
+          <li>مشاهدة: "Godot 4 in 100 Seconds" على يوتيوب</li>
+          <li>إنشاء أول مستودع GitHub للمشاريع</li>
+        </ul>
+        <span class="day-time">⏱ 90 دقيقة</span>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-num"><div class="d">يوم</div><div class="n">٢</div></div>
+      <div>
+        <div class="day-title">📐 مفاهيم Godot الأساسية</div>
+        <ul class="day-tasks">
+          <li>فهم نظام Scenes & Nodes: كل شيء في Godot هو Node</li>
+          <li>إنشاء مشهد بسيط: خلفية + مربع يتحرك</li>
+          <li>تعلّم: GDScript المتغيرات (var) والدوال (func)</li>
+          <li>جعل المربع يتحرك بضغط مفاتيح الأسهم</li>
+          <li>حفظ المشروع على GitHub</li>
+        </ul>
+        <span class="day-time">⏱ 90 دقيقة</span>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-num"><div class="d">يوم</div><div class="n">٣</div></div>
+      <div>
+        <div class="day-title">🧱 الفيزياء والتصادم</div>
+        <ul class="day-tasks">
+          <li>تعلّم: CharacterBody2D وكيف يختلف عن Sprite</li>
+          <li>إضافة الجاذبية والقفز للشخصية</li>
+          <li>إنشاء أرضية وجدران (StaticBody2D)</li>
+          <li>ضبط سرعة الحركة وارتفاع القفز</li>
+          <li>تجربة اللعبة والتعديل حتى تبدو "مريحة"</li>
+        </ul>
+        <span class="day-time">⏱ 90 دقيقة</span>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-num"><div class="d">يوم</div><div class="n">٤</div></div>
+      <div>
+        <div class="day-title">🎨 إضافة الجماليات الأساسية</div>
+        <ul class="day-tasks">
+          <li>تحميل Sprites مجانية من kenney.nl (حزمة Platformer)</li>
+          <li>استبدال المربع بشخصية رسومية</li>
+          <li>إضافة صوت قفز من jsfxr.com</li>
+          <li>دمج الصوت في لحظة القفز (AudioStreamPlayer)</li>
+          <li>إضافة خلفية ملونة أو صورة</li>
+        </ul>
+        <span class="day-time">⏱ 90 دقيقة</span>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-num"><div class="d">يوم</div><div class="n">٥</div></div>
+      <div>
+        <div class="day-title">🏆 نظام النقاط والـ UI</div>
+        <ul class="day-tasks">
+          <li>إضافة "عملات" يجمعها اللاعب (Area2D + Sprite)</li>
+          <li>إنشاء عداد النقاط على الشاشة (Label + CanvasLayer)</li>
+          <li>برمجة: كلما لمست العملة تختفي وتزيد النقاط</li>
+          <li>إضافة شاشة "Game Over" بسيطة</li>
+          <li>تعلّم Signals: أداة التواصل بين الـ Nodes</li>
+        </ul>
+        <span class="day-time">⏱ 2 ساعة</span>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-num"><div class="d">يوم</div><div class="n">٦</div></div>
+      <div>
+        <div class="day-title">👾 أول عدو في لعبتك</div>
+        <ul class="day-tasks">
+          <li>إضافة عدو بسيط يتحرك يميناً ويساراً</li>
+          <li>برمجة: اللاعب يموت عند لمس العدو</li>
+          <li>إضافة صوت الموت وإعادة تشغيل المشهد</li>
+          <li>إنشاء 3 منصات بمستويات مختلفة</li>
+          <li>اختبار اللعبة 10 مرات وتعديل ما يبدو "غير مريح"</li>
+        </ul>
+        <span class="day-time">⏱ 2 ساعة</span>
+      </div>
+    </div>
+
+    <div class="day-card" style="border-color:var(--accent1)">
+      <div class="day-num" style="background:linear-gradient(135deg,#10b981,#06b6d4)"><div class="d">يوم</div><div class="n">٧</div></div>
+      <div>
+        <div class="day-title">🚀 النشر والاحتفال!</div>
+        <ul class="day-tasks">
+          <li>Export اللعبة لـ HTML5 (Web) من Godot</li>
+          <li>إنشاء حساب على itch.io ورفع لعبتك</li>
+          <li>كتابة وصف بسيط وإضافة صور للعبة</li>
+          <li>مشاركة الرابط مع أصدقاء أو على Reddit (r/godot)</li>
+          <li>مراجعة الأسبوع: ما تعلّمت؟ ما الذي بقي غامضاً؟ خطة الأسبوع القادم</li>
+        </ul>
+        <span class="day-time">⏱ 2 ساعة</span>
+        <div style="margin-top:12px;padding:10px;background:rgba(16,185,129,0.1);border-radius:10px;font-size:0.85rem;color:#10b981">
+          🎉 <strong>مبروك!</strong> في 7 أيام فقط بنيت ونشرت أول لعبة حقيقية لك على الإنترنت!
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:8px;background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(6,182,212,0.05));border-color:var(--accent1)">
+      <h3 style="margin-bottom:12px">📌 قواعد الأسبوع الأول</h3>
+      <div class="grid-3">
+        <div style="text-align:center;padding:14px;background:var(--bg2);border-radius:12px">
+          <div style="font-size:1.5rem;margin-bottom:6px">⏰</div>
+          <div style="font-weight:700;font-size:0.9rem">كل يوم على حدة</div>
+          <div style="font-size:0.8rem;color:var(--text2);margin-top:4px">لا تقفز للدرس التالي قبل تطبيق الحالي</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--bg2);border-radius:12px">
+          <div style="font-size:1.5rem;margin-bottom:6px">🐛</div>
+          <div style="font-weight:700;font-size:0.9rem">الأخطاء طبيعية</div>
+          <div style="font-size:0.8rem;color:var(--text2);margin-top:4px">كل خطأ تحلّه يعلّمك أكثر من درس كامل</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--bg2);border-radius:12px">
+          <div style="font-size:1.5rem;margin-bottom:6px">📸</div>
+          <div style="font-weight:700;font-size:0.9rem">وثّق كل شيء</div>
+          <div style="font-size:0.8rem;color:var(--text2);margin-top:4px">Screenshot لكل إنجاز — حتى الصغير منه</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CERTIFICATES ===== -->
+  <div class="section" id="certs">
+    <div class="sec-header">
+      <h2>🎓 كورسات مجانية بشهادات معتمدة</h2>
+      <p>كل كورس هنا مجاني ويمنحك شهادة حقيقية تضيفها لـ CV ولـ LinkedIn — مرتّبة حسب مرحلة تعلّمك</p>
+    </div>
+
+    <!-- ROADMAP VISUAL -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:24px;padding:28px;margin-bottom:32px">
+      <div class="label" style="margin-bottom:20px">🗺️ مسار الشهادات — من المبتدئ للمحترف</div>
+      <div style="display:flex;flex-direction:column;gap:0">
+
+        <!-- Stage 1 -->
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#10b981,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.9rem">١</div>
+            <div style="width:2px;flex:1;background:linear-gradient(180deg,#10b981,#7c3aed);min-height:60px;margin-top:4px"></div>
+          </div>
+          <div style="padding-bottom:28px;flex:1">
+            <div style="font-weight:800;font-size:1rem;color:#10b981;margin-bottom:4px">أساسيات البرمجة والحوسبة</div>
+            <div style="font-size:0.83rem;color:var(--text2)">قبل الألعاب — أسس البرمجة العامة</div>
+          </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4f46e5);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.9rem">٢</div>
+            <div style="width:2px;flex:1;background:linear-gradient(180deg,#7c3aed,#f59e0b);min-height:60px;margin-top:4px"></div>
+          </div>
+          <div style="padding-bottom:28px;flex:1">
+            <div style="font-weight:800;font-size:1rem;color:#a78bfa;margin-bottom:4px">تطوير الألعاب والـ Game Design</div>
+            <div style="font-size:0.83rem;color:var(--text2)">الجوهر — كورسات متخصصة في صناعة الألعاب</div>
+          </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#ef4444);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.9rem">٣</div>
+            <div style="width:2px;flex:1;background:linear-gradient(180deg,#f59e0b,#06b6d4);min-height:60px;margin-top:4px"></div>
+          </div>
+          <div style="padding-bottom:28px;flex:1">
+            <div style="font-weight:800;font-size:1rem;color:#f59e0b;margin-bottom:4px">الفن الرقمي والصوت وسرد القصة</div>
+            <div style="font-size:0.83rem;color:var(--text2)">المهارات المكمّلة لصنع تجربة متكاملة</div>
+          </div>
+        </div>
+
+        <!-- Stage 4 -->
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#06b6d4,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.9rem">٤</div>
+          </div>
+          <div style="flex:1">
+            <div style="font-weight:800;font-size:1rem;color:#06b6d4;margin-bottom:4px">إدارة المشاريع والتوظيف</div>
+            <div style="font-size:0.83rem;color:var(--text2)">تحويل مهاراتك إلى مسيرة مهنية</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- STAGE 1 COURSES -->
+    <div class="label" style="color:#10b981;margin-bottom:16px">① أساسيات البرمجة والحوسبة</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px">
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#10b981'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">🎓</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">CS50's Introduction to Computer Science</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">Harvard University عبر edX — الأشهر في العالم لتعلم أساسيات الحوسبة والبرمجة من الصفر</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 مجاني بالكامل</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة مجانية</span>
+              <span style="background:rgba(124,58,237,0.1);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🏛️ Harvard</span>
+              <span style="background:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">⏱ 10-20 ساعة</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">edX.org</div>
+            <div style="font-size:0.72rem;color:var(--text3);margin-top:2px">cs50.harvard.edu</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding:10px 14px;background:var(--bg2);border-radius:10px;font-size:0.82rem;color:var(--text2)">
+          💡 <strong>لماذا هو؟</strong> يعلمك كيف يفكر الكمبيوتر من الأساس — C، Python، SQL، JavaScript. من أكمله يفهم البرمجة بعمق حقيقي لا حفظاً.
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#10b981'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">🐍</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">Python for Everybody Specialization</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">University of Michigan عبر Coursera — تعلم Python من الصفر مع 5 كورسات متسلسلة وشهادة تخصص</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 Audit مجاني</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة بـ Aid مجاني</span>
+              <span style="background:rgba(124,58,237,0.1);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🎓 Michigan Uni</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">Coursera</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding:10px 14px;background:var(--bg2);border-radius:10px;font-size:0.82rem;color:var(--text2)">
+          💡 <strong>نصيحة:</strong> اطلب Financial Aid في Coursera للحصول على الشهادة مجاناً — يُقبل في 99% من الحالات خلال 15 يوماً.
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#10b981'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">💻</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">Responsive Web Design Certification</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">freeCodeCamp — شهادة HTML/CSS مع 300 ساعة تدريب عملي، مفيد لواجهات الألعاب وصفحات النشر</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 مجاني 100%</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة مجانية</span>
+              <span style="background:rgba(124,58,237,0.1);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">⏱ 300 ساعة</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">freeCodeCamp</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- STAGE 2 COURSES -->
+    <div class="label" style="color:#a78bfa;margin-bottom:16px">② تطوير الألعاب والـ Game Design</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px">
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">🎮</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">CS50's Introduction to Game Development</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">Harvard University عبر edX — الكورس الأشمل لتعلم تطوير الألعاب من هارفارد. يغطي Lua، Unity، وأساسيات Game Design</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 مجاني بالكامل</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة مجانية</span>
+              <span style="background:rgba(124,58,237,0.1);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🏛️ Harvard</span>
+              <span style="background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">⭐ الأهم</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">edX.org</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding:10px 14px;background:var(--bg2);border-radius:10px;font-size:0.82rem;color:var(--text2)">
+          💡 <strong>لماذا هو؟</strong> يعطيك نظرة شاملة على صناعة الألعاب من منظور أكاديمي حقيقي. مثالي كمرجع نظري بجانب التطبيق العملي على Godot.
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">🕹️</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">Game Design and Development Specialization</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">Michigan State University عبر Coursera — 5 كورسات متسلسلة تغطي Game Design وUnity من أكاديميين متخصصين</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 Audit + Aid مجاني</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة تخصص</span>
+              <span style="background:rgba(124,58,237,0.1);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🎓 Michigan State</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">Coursera</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">⚙️</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">Unity Essentials Pathway</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">Unity Technologies — المنصة الرسمية لـ Unity تمنحك شهادة Unity Essentials بعد إنهاء مسار تعليمي منظم</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 مجاني 100%</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة Unity رسمية</span>
+              <span style="background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🏢 رسمية من Unity</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">learn.unity.com</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding:10px 14px;background:var(--bg2);border-radius:10px;font-size:0.82rem;color:var(--text2)">
+          💡 <strong>قيمة مضافة:</strong> شهادة Unity الرسمية تُذكر بالاسم في سير ذاتية كثيرة — أصحاب العمل يعرفونها.
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">🧩</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">Game Design: Art and Concepts Specialization</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">CalArts عبر Coursera — من أفضل مدارس الفنون في العالم، يغطي Game Design بشكل إبداعي وعميق</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 Audit + Aid مجاني</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة تخصص</span>
+              <span style="background:rgba(124,58,237,0.1);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🎨 CalArts</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">Coursera</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- STAGE 3 COURSES -->
+    <div class="label" style="color:#f59e0b;margin-bottom:16px">③ الفن الرقمي والصوت وسرد القصة</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px">
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#f59e0b'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">🎨</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">Graphic Design Specialization</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">CalArts عبر Coursera — يغطي Typography، Color Theory، Composition — مهارات مباشرة لتصميم واجهات الألعاب والـ UI</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 Audit + Aid</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة تخصص</span>
+              <span style="background:rgba(124,58,237,0.1);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🎨 CalArts</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">Coursera</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#f59e0b'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">✍️</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">Creative Writing Specialization</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">Wesleyan University عبر Coursera — يطور مهارات سرد القصة والكتابة الإبداعية — أساسي لصنع قصص ألعاب مقنعة</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 Audit + Aid</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة تخصص</span>
+              <span style="background:rgba(124,58,237,0.1);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🎓 Wesleyan</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">Coursera</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#f59e0b'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">🧊</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">Blender Fundamentals — Blender Foundation</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">من صانعي Blender أنفسهم — سلسلة مجانية كاملة لتعلم النمذجة ثلاثية الأبعاد لألعاب 3D</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 مجاني 100%</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة إتمام</span>
+              <span style="background:rgba(124,58,237,0.1);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🏢 رسمية من Blender</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">studio.blender.org</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- STAGE 4 COURSES -->
+    <div class="label" style="color:#06b6d4;margin-bottom:16px">④ إدارة المشاريع والتوظيف</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px">
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#06b6d4'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">📋</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">Google Project Management Certificate</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">Google عبر Coursera — يعلمك إدارة المشاريع بطريقة Agile وScrum — نفس الطريقة التي تعمل بها استوديوهات الألعاب</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 Audit + Aid</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة Google</span>
+              <span style="background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🔴 Google رسمية</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">Coursera</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding:10px 14px;background:var(--bg2);border-radius:10px;font-size:0.82rem;color:var(--text2)">
+          💡 <strong>للمرحلة المتقدمة:</strong> عندما تريد العمل ضمن فريق أو استوديو — هذه الشهادة تثبت أنك تفهم كيف تُدار المشاريع احترافياً.
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s" onmouseover="this.style.borderColor='#06b6d4'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">🤖</div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">Machine Learning Specialization</div>
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px">Andrew Ng / Stanford عبر Coursera — للمرحلة المتقدمة جداً: لدمج الذكاء الاصطناعي في الألعاب (NPCs ذكية، Procedural Generation)</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🆓 Audit + Aid</span>
+              <span style="background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">📜 شهادة تخصص</span>
+              <span style="background:rgba(124,58,237,0.1);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:700">🎓 Stanford</span>
+            </div>
+          </div>
+          <div style="text-align:left;flex-shrink:0">
+            <div style="font-size:0.73rem;color:var(--text3);margin-bottom:4px">المنصة</div>
+            <div style="font-weight:700;font-size:0.88rem;color:#06b6d4">Coursera</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- HOW TO GET FREE CERTS -->
+    <div style="background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(6,182,212,0.05));border:1px solid rgba(16,185,129,0.25);border-radius:24px;padding:28px;margin-bottom:20px">
+      <h3 style="margin-bottom:18px;font-size:1.1rem">💰 كيف تحصل على الشهادات مجاناً — خطوة بخطوة</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+        <div style="background:var(--bg2);border-radius:14px;padding:16px">
+          <div style="font-weight:800;color:#10b981;margin-bottom:8px;font-size:0.92rem">① Coursera — Financial Aid</div>
+          <ul style="list-style:none;font-size:0.82rem;color:var(--text2)">
+            <li style="padding:3px 0">▹ افتح الكورس واضغط "Enroll for Free"</li>
+            <li style="padding:3px 0">▹ اختر "Apply for Financial Aid"</li>
+            <li style="padding:3px 0">▹ اكتب سبب الحاجة بصدق (150 كلمة)</li>
+            <li style="padding:3px 0">▹ انتظر 15 يوماً → موافقة شبه مضمونة</li>
+          </ul>
+        </div>
+        <div style="background:var(--bg2);border-radius:14px;padding:16px">
+          <div style="font-weight:800;color:#06b6d4;margin-bottom:8px;font-size:0.92rem">② edX — Audit Mode</div>
+          <ul style="list-style:none;font-size:0.82rem;color:var(--text2)">
+            <li style="padding:3px 0">▹ سجّل وادخل الكورس مجاناً بـ Audit</li>
+            <li style="padding:3px 0">▹ شاهد كل المحتوى بالمجان</li>
+            <li style="padding:3px 0">▹ الشهادة مجانية عبر Financial Aid أيضاً</li>
+            <li style="padding:3px 0">▹ CS50 مجاني بالكامل بلا قيود</li>
+          </ul>
+        </div>
+        <div style="background:var(--bg2);border-radius:14px;padding:16px">
+          <div style="font-weight:800;color:#a78bfa;margin-bottom:8px;font-size:0.92rem">③ المجاني 100% بلا شروط</div>
+          <ul style="list-style:none;font-size:0.82rem;color:var(--text2)">
+            <li style="padding:3px 0">▹ freeCodeCamp: شهادات مجانية دائماً</li>
+            <li style="padding:3px 0">▹ Unity Learn: مجاني رسمياً</li>
+            <li style="padding:3px 0">▹ Blender Foundation: مجاني رسمياً</li>
+            <li style="padding:3px 0">▹ CS50 Harvard: مجاني رسمياً</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CERT TIMELINE -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:24px;padding:28px">
+      <h3 style="margin-bottom:20px;font-size:1.05rem">📅 الجدول الزمني المقترح للشهادات</h3>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;padding:12px;background:var(--bg2);border-radius:12px">
+          <div style="font-weight:700;font-size:0.82rem;color:#10b981">الشهر 1-2</div>
+          <div style="font-size:0.85rem">CS50 Computer Science + freeCodeCamp (أثناء تعلم Godot)</div>
+        </div>
+        <div style="display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;padding:12px;background:var(--bg2);border-radius:12px">
+          <div style="font-weight:700;font-size:0.82rem;color:#10b981">الشهر 3-4</div>
+          <div style="font-size:0.85rem">CS50 Game Development + Unity Essentials (موازياً للمشاريع)</div>
+        </div>
+        <div style="display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;padding:12px;background:var(--bg2);border-radius:12px">
+          <div style="font-weight:700;font-size:0.82rem;color:#a78bfa">الشهر 5-8</div>
+          <div style="font-size:0.85rem">Game Design Specialization (Michigan/CalArts) + Graphic Design</div>
+        </div>
+        <div style="display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;padding:12px;background:var(--bg2);border-radius:12px">
+          <div style="font-weight:700;font-size:0.82rem;color:#f59e0b">الشهر 9-12</div>
+          <div style="font-size:0.85rem">Blender Fundamentals + Creative Writing (لمن يريد سرداً قوياً)</div>
+        </div>
+        <div style="display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;padding:12px;background:var(--bg2);border-radius:12px">
+          <div style="font-weight:700;font-size:0.82rem;color:#06b6d4">الشهر 13-18</div>
+          <div style="font-size:0.85rem">Google Project Management + Machine Learning (للمتقدمين)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== PROJECTS ===== -->
+  <div class="section" id="projects">
+    <div class="sec-header">
+      <h2>🚀 مشاريع البداية — من الأسهل للأصعب</h2>
+      <p>كل مشروع مرتب بخطوات واضحة — ابدأ من المشروع الأول ولا تقفز</p>
+    </div>
+
+    <!-- DIFFICULTY LEGEND -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px">
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-size:0.82rem">
+        <span style="width:10px;height:10px;border-radius:50%;background:#10b981;display:inline-block"></span> سهل جداً — ساعة أو أقل
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-size:0.82rem">
+        <span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;display:inline-block"></span> سهل — يوم واحد
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-size:0.82rem">
+        <span style="width:10px;height:10px;border-radius:50%;background:#7c3aed;display:inline-block"></span> متوسط — أسبوع
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-size:0.82rem">
+        <span style="width:10px;height:10px;border-radius:50%;background:#ef4444;display:inline-block"></span> تحدي — أسبوعين+
+      </div>
+    </div>
+
+    <!-- PROJECT 1 -->
+    <div style="background:var(--card);border:2px solid rgba(16,185,129,0.4);border-radius:24px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#10b981,#06b6d4)"></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap">
+        <div style="width:52px;height:52px;border-radius:16px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">🟩</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+            <span style="font-weight:900;font-size:1.15rem">مشروع #1 — Moving Square</span>
+            <span style="background:rgba(16,185,129,0.12);color:#10b981;border:1px solid rgba(16,185,129,0.3);padding:3px 12px;border-radius:100px;font-size:0.73rem;font-weight:700">● سهل جداً</span>
+          </div>
+          <div style="font-size:0.85rem;color:var(--text2)">مربع يتحرك على الشاشة بمفاتيح الكيبورد — أبسط لعبة ممكنة</div>
+        </div>
+        <div style="text-align:center;padding:10px 16px;background:var(--bg2);border-radius:12px">
+          <div style="font-size:0.7rem;color:var(--text3)">الوقت</div>
+          <div style="font-weight:800;color:#10b981;font-size:1rem">30 دقيقة</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">قبل تبدأ — تحتاج تعرف</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#10b981">✓</span> تثبيت Godot 4</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#10b981">✓</span> معرفة كيف تفتح مشروع جديد</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#10b981">✓</span> لا شيء آخر!</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">الخطوات</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(16,185,129,0.2);color:#10b981;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">1</span>أنشئ Scene جديدة واختر Node2D</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(16,185,129,0.2);color:#10b981;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">2</span>أضف ColorRect كـ child واضبط حجمه 50x50</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(16,185,129,0.2);color:#10b981;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">3</span>أضف Script واكتب: <code style="background:var(--bg3);padding:1px 5px;border-radius:4px;font-size:0.8rem">var speed = 200</code></div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(16,185,129,0.2);color:#10b981;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">4</span>في <code style="background:var(--bg3);padding:1px 5px;border-radius:4px;font-size:0.8rem">_process(delta)</code> اقرأ Input واحرك المربع</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(16,185,129,0.2);color:#10b981;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">5</span>اضغط Play وشاهد مربعك يتحرك!</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">ستتعلم</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:5px">
+            <li style="font-size:0.84rem;display:flex;gap:8px;align-items:flex-start"><span style="color:#06b6d4">▹</span>كيف تنشئ Scene وتشغلها</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px;align-items:flex-start"><span style="color:#06b6d4">▹</span>دالة _process و delta</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px;align-items:flex-start"><span style="color:#06b6d4">▹</span>Input.get_axis للتحكم</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px;align-items:flex-start"><span style="color:#06b6d4">▹</span>position و velocity</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:10px 14px;background:rgba(16,185,129,0.07);border-radius:10px;font-size:0.82rem;color:var(--text2)">
+        💡 <strong>تحدي إضافي:</strong> بعد ما يشتغل، حاول تمنع المربع من الخروج من حدود الشاشة باستخدام <code style="background:var(--bg3);padding:1px 5px;border-radius:4px">clamp()</code>
+      </div>
+    </div>
+
+    <!-- PROJECT 2 -->
+    <div style="background:var(--card);border:2px solid rgba(16,185,129,0.35);border-radius:24px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#10b981,#06b6d4)"></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap">
+        <div style="width:52px;height:52px;border-radius:16px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">⭕</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+            <span style="font-weight:900;font-size:1.15rem">مشروع #2 — Catch the Ball</span>
+            <span style="background:rgba(16,185,129,0.12);color:#10b981;border:1px solid rgba(16,185,129,0.3);padding:3px 12px;border-radius:100px;font-size:0.73rem;font-weight:700">● سهل جداً</span>
+          </div>
+          <div style="font-size:0.85rem;color:var(--text2)">كرة تسقط من الأعلى عشوائياً — حرّك المضرب لتصطادها قبل ما تسقط</div>
+        </div>
+        <div style="text-align:center;padding:10px 16px;background:var(--bg2);border-radius:12px">
+          <div style="font-size:0.7rem;color:var(--text3)">الوقت</div>
+          <div style="font-weight:800;color:#10b981;font-size:1rem">60 دقيقة</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">قبل تبدأ</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#10b981">✓</span> أكملت مشروع #1</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#10b981">✓</span> تفهم position و Input</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">الخطوات</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(16,185,129,0.2);color:#10b981;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">1</span>أنشئ المضرب (ColorRect يتحرك يميناً ويساراً فقط)</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(16,185,129,0.2);color:#10b981;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">2</span>أنشئ الكرة وخليها تسقط بسرعة ثابتة</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(16,185,129,0.2);color:#10b981;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">3</span>استخدم <code style="background:var(--bg3);padding:1px 5px;border-radius:4px;font-size:0.8rem">Rect2.intersects()</code> للتصادم</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(16,185,129,0.2);color:#10b981;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">4</span>أضف Label لعدد النقاط</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(16,185,129,0.2);color:#10b981;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">5</span>إعادة الكرة لأعلى بـ x عشوائي عند الإصابة أو السقوط</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">ستتعلم</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:5px">
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>كشف التصادم البسيط</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>randf_range() للعشوائية</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>Label وتحديث النص</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>منطق Win/Lose</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT 3 -->
+    <div style="background:var(--card);border:2px solid rgba(245,158,11,0.4);border-radius:24px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#f59e0b,#ef4444)"></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap">
+        <div style="width:52px;height:52px;border-radius:16px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">🏓</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+            <span style="font-weight:900;font-size:1.15rem">مشروع #3 — Pong</span>
+            <span style="background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);padding:3px 12px;border-radius:100px;font-size:0.73rem;font-weight:700">● سهل</span>
+          </div>
+          <div style="font-size:0.85rem;color:var(--text2)">لعبة Pong الكلاسيكية — لاعبان، كرة، نقاط، وصوت — أول لعبة حقيقية كاملة</div>
+        </div>
+        <div style="text-align:center;padding:10px 16px;background:var(--bg2);border-radius:12px">
+          <div style="font-size:0.7rem;color:var(--text3)">الوقت</div>
+          <div style="font-weight:800;color:#f59e0b;font-size:1rem">3-5 ساعات</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">قبل تبدأ</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#f59e0b">✓</span> أكملت مشروعي #1 و #2</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#f59e0b">✓</span> تفهم التصادم والنقاط</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#f59e0b">✓</span> عندك 3-5 ساعات فراغ</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">الخطوات</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(245,158,11,0.2);color:#f59e0b;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">1</span>أنشئ مضربين: لاعب (W/S) وعدو (أسهم)</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(245,158,11,0.2);color:#f59e0b;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">2</span>الكرة تتحرك بـ velocity وترتد من الحواف</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(245,158,11,0.2);color:#f59e0b;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">3</span>ارتداد الكرة عند ضرب المضرب</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(245,158,11,0.2);color:#f59e0b;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">4</span>نقطة لمن تسقط الكرة في جانبه + صوت</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(245,158,11,0.2);color:#f59e0b;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">5</span>شاشة Game Over عند وصول أحدهم لـ 5 نقاط</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">ستتعلم</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:5px">
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>Velocity والارتداد الفيزيائي</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>تعدد اللاعبين على نفس الجهاز</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>AudioStreamPlayer للصوت</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>تغيير المشاهد (Scenes)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT 4 -->
+    <div style="background:var(--card);border:2px solid rgba(245,158,11,0.35);border-radius:24px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#f59e0b,#7c3aed)"></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap">
+        <div style="width:52px;height:52px;border-radius:16px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">🦘</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+            <span style="font-weight:900;font-size:1.15rem">مشروع #4 — Endless Runner</span>
+            <span style="background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);padding:3px 12px;border-radius:100px;font-size:0.73rem;font-weight:700">● سهل</span>
+          </div>
+          <div style="font-size:0.85rem;color:var(--text2)">شخصية تجري وتقفز فوق العقبات — زي Dino Game في Chrome — بسيطة ومرضية</div>
+        </div>
+        <div style="text-align:center;padding:10px 16px;background:var(--bg2);border-radius:12px">
+          <div style="font-size:0.7rem;color:var(--text3)">الوقت</div>
+          <div style="font-weight:800;color:#f59e0b;font-size:1rem">4-6 ساعات</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">قبل تبدأ</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#f59e0b">✓</span> أكملت مشروع #3</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#f59e0b">✓</span> تعرف CharacterBody2D</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">الخطوات</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(245,158,11,0.2);color:#f59e0b;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">1</span>شخصية بجاذبية وقفز بزر واحد (Space)</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(245,158,11,0.2);color:#f59e0b;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">2</span>عقبات تأتي من اليمين وتختفي لليسار</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(245,158,11,0.2);color:#f59e0b;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">3</span>عداد وقت/مسافة كنقاط</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(245,158,11,0.2);color:#f59e0b;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">4</span>السرعة تزيد تدريجياً كلما طالت المسافة</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(245,158,11,0.2);color:#f59e0b;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">5</span>Game Over + أعلى نقاط (High Score)</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">ستتعلم</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:5px">
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>CharacterBody2D والجاذبية</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>Spawning الأعداء تلقائياً</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>حفظ High Score محلياً</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>صعوبة ديناميكية متزايدة</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT 5 -->
+    <div style="background:var(--card);border:2px solid rgba(124,58,237,0.4);border-radius:24px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7c3aed,#06b6d4)"></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap">
+        <div style="width:52px;height:52px;border-radius:16px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">🔫</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+            <span style="font-weight:900;font-size:1.15rem">مشروع #5 — Space Shooter</span>
+            <span style="background:rgba(124,58,237,0.12);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:3px 12px;border-radius:100px;font-size:0.73rem;font-weight:700">◆ متوسط</span>
+          </div>
+          <div style="font-size:0.85rem;color:var(--text2)">مركبة فضائية تطلق النار على أعداء — لعبة كاملة فيها موجات أعداء ونظام حياة وتأثيرات</div>
+        </div>
+        <div style="text-align:center;padding:10px 16px;background:var(--bg2);border-radius:12px">
+          <div style="font-size:0.7rem;color:var(--text3)">الوقت</div>
+          <div style="font-weight:800;color:#a78bfa;font-size:1rem">أسبوع كامل</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">قبل تبدأ</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#a78bfa">✓</span> أكملت مشاريع #1 إلى #4</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#a78bfa">✓</span> تعرف Signals و Scenes متعددة</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;padding:6px 10px;background:var(--bg2);border-radius:8px"><span style="color:#a78bfa">✓</span> Sprites من Kenney.nl جاهزة</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">الخطوات</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(124,58,237,0.2);color:#a78bfa;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">1</span>مركبة تتحرك بكل الاتجاهات</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(124,58,237,0.2);color:#a78bfa;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">2</span>طلقات تنطلق للأعلى عند Space</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(124,58,237,0.2);color:#a78bfa;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">3</span>أعداء ينزلون بأنماط مختلفة</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(124,58,237,0.2);color:#a78bfa;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">4</span>انفجارات وصوت عند الإصابة</div>
+            <div style="display:flex;gap:10px;font-size:0.84rem"><span style="background:rgba(124,58,237,0.2);color:#a78bfa;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">5</span>3 أرواح + موجات + Boss بسيط</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">ستتعلم</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:5px">
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>Object Pooling للطلقات</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>Groups لتنظيم الأعداء</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>Particles للانفجارات</li>
+            <li style="font-size:0.84rem;display:flex;gap:8px"><span style="color:#06b6d4">▹</span>نظام أرواح وUI متكامل</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:10px 14px;background:rgba(124,58,237,0.07);border-radius:10px;font-size:0.82rem;color:var(--text2)">
+        🏆 <strong>بعد هذا المشروع:</strong> أنت رسمياً مبتدئ متقدم — جاهز للـ Platformer الكاملة والـ RPG
+      </div>
+    </div>
+
+    <!-- GOLDEN RULE -->
+    <div style="background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(239,68,68,0.05));border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:24px;margin-top:8px">
+      <h3 style="margin-bottom:16px;font-size:1rem">⚡ القاعدة الذهبية للمشاريع</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+        <div style="padding:14px;background:var(--bg2);border-radius:12px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏁</div>
+          <div style="font-weight:700;font-size:0.88rem;margin-bottom:4px">أنهِ أولاً</div>
+          <div style="font-size:0.78rem;color:var(--text2)">لعبة ناقصة لكن مكتملة أفضل من فكرة مثالية غير منفذة</div>
+        </div>
+        <div style="padding:14px;background:var(--bg2);border-radius:12px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">📦</div>
+          <div style="font-weight:700;font-size:0.88rem;margin-bottom:4px">انشر كل شيء</div>
+          <div style="font-size:0.78rem;color:var(--text2)">حتى المشروع #1 يستحق النشر على itch.io — بناء العادة أهم</div>
+        </div>
+        <div style="padding:14px;background:var(--bg2);border-radius:12px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🔢</div>
+          <div style="font-weight:700;font-size:0.88rem;margin-bottom:4px">الترتيب مهم</div>
+          <div style="font-size:0.78rem;color:var(--text2)">لا تقفز لمشروع #4 قبل إنهاء #1 و#2 — كل مشروع يبني على السابق</div>
+        </div>
+        <div style="padding:14px;background:var(--bg2);border-radius:12px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🐛</div>
+          <div style="font-weight:700;font-size:0.88rem;margin-bottom:4px">الأخطاء = تعلم</div>
+          <div style="font-size:0.78rem;color:var(--text2)">كل Bug تحله يعلمك أكثر من ساعة مشاهدة — لا تخف منها</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    بُني بشغف لكل من يريد صنع عوالم من لا شيء ✦ <span>رحلتك تبدأ اليوم</span>
+    <div style="margin-top:14px;font-size:0.78rem;color:var(--text3)">صُنع بشغف من <span style="font-weight:800">alanshlot</span> © 2026</div>
+  </div>
+
+</div>
+
+<script>
+function showTab(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  (el || event.target).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollTabs(dir) {
+  // dir: 1 = scroll right (towards start in RTL), -1 = scroll left
+  const tabs = document.getElementById('tabs');
+  tabs.scrollBy({ left: dir * -200, behavior: 'smooth' });
+  setTimeout(updateArrows, 350);
+}
+
+function updateArrows() {
+  const tabs = document.getElementById('tabs');
+  const rArrow = document.getElementById('arrowRight');
+  const lArrow = document.getElementById('arrowLeft');
+  const atStart = tabs.scrollLeft <= 4;
+  const atEnd = tabs.scrollLeft >= tabs.scrollWidth - tabs.clientWidth - 4;
+  // In RTL, scrollLeft starts at max and decreases
+  rArrow.classList.toggle('disabled', atStart);
+  lArrow.classList.toggle('disabled', atEnd);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.getElementById('tabs');
+  tabs.addEventListener('scroll', updateArrows);
+  updateArrows();
+});
+</script>
+</body>
+</html>
